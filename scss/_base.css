@@ -1,0 +1,29 @@
+@import url('https://fonts.google.com/specimen/Ma+Shan+Zheng?sjid=489867880207003152-EU&lang=zh_Hans');
+
+/* 基本样式 */
+* {
+  color: inherit;
+  margin:0;
+}
+
+body{
+  font-family: Poppins;
+}
+
+ul{
+  padding:0;
+  list-style-type: none;
+}
+
+a{
+  text-decoration: none;
+}
+
+hr{
+  border:0;
+  border-top: 1px dotted #efefef;
+}
+
+img{
+  max-width: 100%;
+}
