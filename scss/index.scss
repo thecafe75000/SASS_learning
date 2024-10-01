@@ -1,13 +1,19 @@
 // 变量，函数
+@import 'functions';
 @import 'variables';
 
 // 基础样式，布局相关的设置
 @import 'base';
 
+// 媒体查询
+@import 'breakpoints';
+
 @import 'colors';
 
 // components组件(Card,Button,Input等）的样式
 @import 'components/card';
-@import 'components/button'
+@import 'components/button';
+@import 'components/navbar';
 
 // Utilities公共样式(padding, margin,border等)
+@import 'utilities';

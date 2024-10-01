@@ -475,7 +475,7 @@ sass index.scss index.css # 将index.scss转换为index.css
       
       mixin混入可以避免大量相同的重复样式代码, 
       
-      通过@include + 需要的样式类名()调用 
+      **通过@include + 需要的样式类名()调用** 
       
       ```scss
       // @mixin 部分是不同元素都需要使用的样式
@@ -503,11 +503,119 @@ sass index.scss index.css # 将index.scss转换为index.css
           .btn-outlined-#{$key} {
             @include btn(#fff); // 调用需要的样式
             border: $base-border-thickness solid $val;
-            
+            &:hover {
+              background-color: $val;
+            }
           }
       }
       ```
-      
-      
    
-   9. function函数
+   9. function函数: @function + 函数名(){ }, 返回值通过@return返回
+      
+      ```scss
+      //_functions.scss文件里定义函数
+      @function light-comp($color){
+         $complement: complement($color);
+         $light-complement: lighten($complement, 30%);
+         @return $light-complement;
+      }
+      ```
+      
+      ```scss
+      // 在_buttons.scss文件里调用函数
+      @each $key, $val in $colors {
+          .btn-complement-#{$key} {
+            @include btn($val);
+            color: light-comp($val); // 调用函数
+            &:hover{
+              color:$val;
+            }
+            background-color: light-comp($val); // 调用函数
+          }
+      }
+      ```
+   
+   10. 媒体查询
+       
+       ```scss
+       // 媒体查询
+       $breakpoints:(
+         'xs': 0,
+         'sm': 480px,
+         'md': 720px,
+         'lg': 960px,
+         'xl': 1200px,
+       );
+       
+       @mixin xs{
+         @media(min-width:map-get($breakpoints, 'xs')){
+           @content; // 占位符
+         }
+       }
+       
+       @mixin sm{
+         @media(min-width:map-get($breakpoints, 'sm')){
+           @content; // 占位符
+         }
+       }
+       
+       @mixin md{
+         @media(min-width:map-get($breakpoints, 'md')){
+           @content; // 占位符
+         }
+       }
+       
+       @mixin lg{
+         @media(min-width:map-get($breakpoints, 'lg')){
+           @content; // 占位符
+         }
+       }
+       
+       @mixin xl{
+         @media(min-width:map-get($breakpoints, 'xl')){
+           @content; // 占位符
+         }
+       }
+       
+       @mixin breakpoint($bp:0){
+         @media (min-width:$bp){
+           @content;
+         }
+       }
+       
+       .responsive-test{
+         @include xs {
+           color: red;
+         }
+         @include sm {
+           color: green;
+         }
+         @include md {
+           color: blue;
+         }
+         @include lg {
+           color: yellow;
+         }
+         @include xl {
+           color: pink;
+         }
+         @include breakpoint(1400px){
+           color: orange;
+         }
+       }
+       ```
+       
+       11. 继承: @extend
+           
+           SASS允许一个选择器，继承另一个选择器
+           
+           ```scss
+           .class1 {
+           　　border: 1px solid #ddd;
+           }
+           
+           .class2 {
+           　　@extend .class1;
+           　 font-size:120%;
+           }
+           ```

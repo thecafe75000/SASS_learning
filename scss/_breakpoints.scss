@@ -1,0 +1,65 @@
+// 媒体查询
+$breakpoints:(
+  'xs': 0,
+  'sm': 480px,
+  'md': 720px,
+  'lg': 960px,
+  'xl': 1200px,
+);
+
+@mixin xs{
+  @media(min-width:map-get($breakpoints, 'xs')){
+    @content; // 占位符
+  }
+}
+
+@mixin sm{
+  @media(min-width:map-get($breakpoints, 'sm')){
+    @content; // 占位符
+  }
+}
+
+@mixin md{
+  @media(min-width:map-get($breakpoints, 'md')){
+    @content; // 占位符
+  }
+}
+
+@mixin lg{
+  @media(min-width:map-get($breakpoints, 'lg')){
+    @content; // 占位符
+  }
+}
+
+@mixin xl{
+  @media(min-width:map-get($breakpoints, 'xl')){
+    @content; // 占位符
+  }
+}
+
+@mixin breakpoint($bp:0){
+  @media (min-width:$bp){
+    @content;
+  }
+}
+
+.responsive-test{
+  @include xs {
+    color: red;
+  }
+  @include sm {
+    color: green;
+  }
+  @include md {
+    color: blue;
+  }
+  @include lg {
+    color: yellow;
+  }
+  @include xl {
+    color: pink;
+  }
+  @include breakpoint(1400px){
+    color: orange;
+  }
+}

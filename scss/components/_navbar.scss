@@ -1,0 +1,13 @@
+.navbar{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding:$base-padding $base-padding * 2;
+  box-shadow: $base-box-shadow;
+
+  .sit-title {
+    font-size: $font-size-lg;
+  }
+}
