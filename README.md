@@ -607,17 +607,17 @@ sass index.scss index.css # 将index.scss转换为index.css
    
    11. 继承: @extend
        
-       11. 
-           
-           SASS允许一个选择器，继承另一个选择器
-           
-           ```scss
-           .class1 {
-           　　border: 1px solid #ddd;
-           }
-           
-           .class2 {
-           　　@extend .class1;
-           　 font-size:120%;
-           }
-           ```
+       Sass 允许一个选择器继承另一个选择器
+       
+       ```scss
+       .class1 {
+       　　border: 1px solid #ddd;
+       }
+       
+       .class2 {
+       　　@extend .class1;
+       　 font-size:120%;
+       }
+       ```
+       
+       
