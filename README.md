@@ -604,8 +604,10 @@ sass index.scss index.css # 将index.scss转换为index.css
          }
        }
        ```
+   
+   11. 继承: @extend
        
-       11. 继承: @extend
+       11. 
            
            SASS允许一个选择器，继承另一个选择器
            
