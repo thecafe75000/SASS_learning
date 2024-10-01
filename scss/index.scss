@@ -4,7 +4,10 @@
 // 基础样式，布局相关的设置
 @import 'base';
 
+@import 'colors';
+
 // components组件(Card,Button,Input等）的样式
-@import 'components/card'
+@import 'components/card';
+@import 'components/button'
 
 // Utilities公共样式(padding, margin,border等)

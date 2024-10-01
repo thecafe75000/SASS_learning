@@ -140,7 +140,6 @@ sass index.scss index.css # 将index.scss转换为index.css
    a{
      color: $secondary;
    }
-   
    ```
    
    总之，variables.scss 与 __variables.scss 主要区别在于文件名的命名约定和编译行为.
@@ -164,6 +163,8 @@ sass index.scss index.css # 将index.scss转换为index.css
    // 基础样式，布局相关的设置
    @import 'base';
    
+   @import 'colors';
+   
    // components组件(Card,Button,Input等）的样式
    @import 'components/card'
    
@@ -181,6 +182,16 @@ sass index.scss index.css # 将index.scss转换为index.css
       
       div {
       　 color : $blue;
+      }
+      ```
+      
+      如果变量需要镶嵌在字符串之中，就必须要写在#{}之中
+      
+      ```scss
+      $side : left;
+      
+      .rounded {
+      　　border-#{$side}-radius: 5px;
       }
       ```
    
@@ -222,7 +233,6 @@ sass index.scss index.css # 将index.scss转换为index.css
         $font-size-lg: $base-font-size * 1.5;
         $font-size-xl: $base-font-size * 2;
         $font-size-xxl: $base-font-size * 3;
-        
         ```
       
       - 除法
@@ -320,10 +330,184 @@ sass index.scss index.css # 将index.scss转换为index.css
       
       PS: 注意 debug时，需要在VSCode编辑器的User区的settings里Live Sass Compile > Settungs : Show Output Window on 的下拉框里的选项Debug
    
-   5. each 和 for 循环
+   5. each 和 for 循环：@each  @for
+      
+      ```scss
+      $sizes: 40px, 50px, 80px;
+      
+      @each $size in $sizes {
+        .icon-#{$size} {
+          font-size: $size;
+          height: $size;
+          width: $size;
+        }
+      }
+      
+      ```
+      
+      ```scss
+      // 和map一起使用each循环
+      $icons: (
+          "eye": "\f112", 
+          "start": "\f12e", 
+          "stop": "\f12f"
+      );
+      
+      @each $name, $glyph in $icons {
+        .icon-#{$name}:before {
+          display: inline-block;
+          font-family: "Icon Font";
+          content: $glyph;
+        }
+      }
+      
+      
+      $colors:(
+        'primary': $primary,
+        'secondary': $secondary,
+        'error': $error,
+        'info': $info,
+        'red': $red,
+        'yellow': $yellow,
+        'green': $green,
+        'orange': $orange,
+        'purple': $purple,
+        'gray': $gray,
+        'black': $black,
+        'white': $white   
+      );
+      
+      @each $key, $val in $colors {
+        .text-#{$key} {
+          color: $val;
+        }
+        .bg-#{$key} {
+          background-color: $val;
+        }
+      }
+      ```
+      
+      ```scss
+      // for循环里使用mix()可实现颜色渐变效果
+      @each $key, $val in $colors {
+      
+        // for 循环
+        @for $i from 1 through 6 {
+          .text-#{$key}-light-#{$i} {
+            color: mix(#fff, $val, $i*10)
+          }
+          .bg-#{$key}-light-#{$i} {
+            background-color: mix(#fff, $val, $i*10)
+          }
+        }
+      
+        @for $i from 1 through 6 {
+          .text-#{$key}-dark-#{$i} {
+            color: mix(#000, $val, $i*10)
+          }
+          .bg-#{$key}-dark-#{$i} {
+            background-color: mix(#000, $val, $i*10)
+          }
+        }
+      }
+      ```
    
-   6. 
+   6. 条件语句: @if
+      
+      ```scss
+      //如果$val不等于#000且不等于#fff时，才会进行for循环处理
+        @if($val != #000 and $val != #fff){
+            // for 循环
+            @for $i from 1 through 6 {
+              .text-#{$key}-light-#{$i} {
+                color: mix(#fff, $val, $i*10)
+              }
+              .bg-#{$key}-light-#{$i} {
+                background-color: mix(#fff, $val, $i*10)
+              }
+            }
+      
+            @for $i from 1 through 6 {
+              .text-#{$key}-dark-#{$i} {
+                color: mix(#000, $val, $i*10)
+              }
+              .bg-#{$key}-dark-#{$i} {
+                background-color: mix(#000, $val, $i*10)
+              }
+            }
+        }
+      ```
    
-   7. d'd
+   7. 获取父元素: &
+      
+      一般情况下，`sass`在解开一个嵌套规则时就会把父选择器（`#content`）通过一个空格连接到子选择器的前边（`article`和`aside`）形成（`#content article`和`#content aside`）。这种在CSS里边被称为后代选择器，因为它选择ID为`content`的元素内所有命中选择器`article`和`aside`的元素。但在有些情况下你却不会希望`sass`使用这种后代选择器的方式生成这种连接。
+      
+      最常见的一种情况是当你为链接之类的元素写`：hover`这种伪类时，你并不希望以后代选择器的方式连接。比如说，下面这种情况`sass`就无法正常工作：
+      
+      ```scss
+      article a {
+        color: blue;
+        :hover { color: red }
+      }
+      ```
+      
+      这意味着`color: red`这条规则将会被应用到选择器`article a :hover`，`article`元素内链接的所有子元素在被`hover`时都会变成红色。这是不正确的！你想把这条规则应用到超链接自身，而后代选择器的方式无法帮你实现。
+      
+      解决之道为使用一个特殊的`sass`选择器，即父选择器。在使用嵌套规则时，父选择器能对于嵌套规则如何解开提供更好的控制。它就是一个简单的`&`符号，且可以放在任何一个选择器可出现的地方，比如`h1`放在哪，它就可以放在哪。
+      
+      在为父级选择器添加`：hover`等伪类时，这种方式非常有用:
+      
+      ```scss
+      article a {
+        color: blue;
+        &:hover { color: red }
+      }
+      ```
+      
+      当包含父选择器标识符的嵌套规则被打开时，它不会像后代选择器那样进行拼接，而是`&`被父选择器直接替换：
+      
+      ```css
+      article a { color: blue }
+      article a:hover { color: red }
+      ```
    
+   8. mixin混入: @mixin
+      
+      mixin混入可以避免大量相同的重复样式代码, 
+      
+      通过@include + 需要的样式类名()调用 
+      
+      ```scss
+      // @mixin 部分是不同元素都需要使用的样式
+      @mixin btn($bg-color:#e2e2e2){ // 设置背景颜色的默认值
+        text-decoration: none;
+            cursor: inline-block;
+            border: 0;
+            padding: $base-padding $base-padding * 2;
+            border-radius: $base-border-radius;
+            background-color: $bg-color;
+      }
+      
+      // 设置button的默认样式
+      .btn {
+         @include btn; // btn后没有圆括号，则会直接调用btn的默认样式
+      }
+      
+      @each $key, $val in $colors {
+          .btn-#{$key}{
+            @include btn($val); // 调用需要的样式
+            &:hover {
+              background-color: lighten($val, 4);
+            }
+          }
+          .btn-outlined-#{$key} {
+            @include btn(#fff); // 调用需要的样式
+            border: $base-border-thickness solid $val;
+            
+          }
+      }
+      ```
+      
+      
    
+   9. function函数

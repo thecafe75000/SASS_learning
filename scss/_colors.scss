@@ -1,0 +1,31 @@
+@each $key, $val in $colors {
+  .text-#{$key} {
+    color: $val;
+  }
+  .bg-#{$key} {
+    background-color: $val;
+  }
+
+  //如果$val不等于#000且不等于#fff时，才会进行for循环处理
+  @if($val != #000 and $val != #fff){
+      // for 循环
+      @for $i from 1 through 6 {
+        .text-#{$key}-light-#{$i} {
+          color: mix(#fff, $val, $i*10)
+        }
+        .bg-#{$key}-light-#{$i} {
+          background-color: mix(#fff, $val, $i*10)
+        }
+      }
+
+      @for $i from 1 through 6 {
+        .text-#{$key}-dark-#{$i} {
+          color: mix(#000, $val, $i*10)
+        }
+        .bg-#{$key}-dark-#{$i} {
+          background-color: mix(#000, $val, $i*10)
+        }
+      }
+  }
+}
+
